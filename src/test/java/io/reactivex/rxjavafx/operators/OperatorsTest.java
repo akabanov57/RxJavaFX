@@ -1,16 +1,18 @@
 package io.reactivex.rxjavafx.operators;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjavafx.transformers.FxFlowableTransformers;
 import io.reactivex.rxjavafx.transformers.FxObservableTransformers;
-import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.Test;
 
 public final class OperatorsTest {
 
@@ -23,7 +25,7 @@ public final class OperatorsTest {
                 .compose(FxObservableTransformers.doOnNextCount(onNextCounts::add))
                 .subscribe();
 
-        Assert.assertTrue(onNextCounts.containsAll(Arrays.asList(1, 2, 3)));
+        assertTrue(onNextCounts.containsAll(Arrays.asList(1, 2, 3)));
     }
 
     @Test
@@ -35,20 +37,19 @@ public final class OperatorsTest {
                 .compose(FxObservableTransformers.doOnCompleteCount(onCompleteCount::set))
                 .subscribe();
 
-        Assert.assertTrue(onCompleteCount.get() == 3);
+      assertEquals(3, onCompleteCount.get());
     }
 
     @Test
     public void testDoOnErrorCountObservable() {
         AtomicInteger onErrorCount = new AtomicInteger();
 
-
         Observable.just(5, 10, 15, 0, 20)
                 .map(i -> 5 / i)
                 .compose(FxObservableTransformers.doOnErrorCount(onErrorCount::set))
                 .subscribe();
 
-        Assert.assertTrue(onErrorCount.get() == 3);
+      assertEquals(3, onErrorCount.get());
     }
 
 
@@ -57,36 +58,33 @@ public final class OperatorsTest {
 
         final List<Integer> onNextCounts = new ArrayList<>();
 
-
         Flowable.just("Alpha", "Beta", "Gamma")
                 .compose(FxFlowableTransformers.doOnNextCount(onNextCounts::add))
                 .subscribe();
 
-        Assert.assertTrue(onNextCounts.containsAll(Arrays.asList(1, 2, 3)));
+        assertTrue(onNextCounts.containsAll(Arrays.asList(1, 2, 3)));
     }
 
     @Test
     public void testDoOnCompleteCountFlowable() {
         AtomicInteger onCompleteCount = new AtomicInteger();
 
-
         Flowable.just("Alpha", "Beta", "Gamma")
                 .compose(FxFlowableTransformers.doOnCompleteCount(onCompleteCount::set))
                 .subscribe();
 
-        Assert.assertTrue(onCompleteCount.get() == 3);
+      assertEquals(3, onCompleteCount.get());
     }
 
     @Test
     public void testDoOnErrorCountFlowable() {
         AtomicInteger onErrorCount = new AtomicInteger();
 
-
         Flowable.just(5, 10, 15, 0, 20)
                 .map(i -> 5 / i)
                 .compose(FxFlowableTransformers.doOnErrorCount(onErrorCount::set))
                 .subscribe();
 
-        Assert.assertTrue(onErrorCount.get() == 3);
+      assertEquals(3, onErrorCount.get());
     }
 }

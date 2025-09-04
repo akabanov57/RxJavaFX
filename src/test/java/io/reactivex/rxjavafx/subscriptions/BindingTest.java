@@ -15,6 +15,10 @@
  */
 package io.reactivex.rxjavafx.subscriptions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.processors.PublishProcessor;
@@ -24,19 +28,25 @@ import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import javafx.application.Platform;
 import javafx.beans.binding.Binding;
-import org.junit.Test;
 
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public final class BindingTest {
 
+  @BeforeAll
+  public static void initJFX() {
+    try {
+      javafx.application.Platform.startup(() ->{});
+    }catch(final IllegalStateException ignore) {
+    }
+  }
 
-    @Test
+  @Test
     public void testCompositeBinding() {
         CompositeBinding bindings = new CompositeBinding();
 

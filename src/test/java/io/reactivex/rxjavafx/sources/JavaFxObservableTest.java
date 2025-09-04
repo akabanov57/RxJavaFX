@@ -1,12 +1,12 @@
 /**
  * Copyright 2017 Netflix, Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package io.reactivex.rxjavafx.sources;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.observers.TestObserver;
@@ -25,18 +27,17 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Duration;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
 
 public final class JavaFxObservableTest {
 
-	@BeforeClass
+	@BeforeAll
 	public static void initJFX() {
 		try {
 			javafx.application.Platform.startup(() ->{});
@@ -96,6 +97,7 @@ public final class JavaFxObservableTest {
 
         testObserver.assertValueCount(3);
     }
+
     @Test
     public void testRxObservableChanges() {
         Property<String> sourceProperty = new SimpleStringProperty();
