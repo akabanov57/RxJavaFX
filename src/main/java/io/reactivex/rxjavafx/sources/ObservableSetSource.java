@@ -1,12 +1,12 @@
 /**
  * Copyright 2017 Netflix, Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,7 @@
 package io.reactivex.rxjavafx.sources;
 
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjavafx.observables.JavaFxObservable;
-import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
 import io.reactivex.rxjavafx.subscriptions.JavaFxSubscriptions;
 import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
@@ -29,7 +27,7 @@ public final class ObservableSetSource {
 
     public static <T> Observable<ObservableSet<T>> fromObservableSet(final ObservableSet<T> source) {
 
-        Observable<ObservableSet<T>> mutations = Observable.create((ObservableOnSubscribe<ObservableSet<T>>) subscriber -> {
+        Observable<ObservableSet<T>> mutations = Observable.create(subscriber -> {
             SetChangeListener<T> listener = c -> subscriber.onNext(source);
             source.addListener(listener);
             subscriber.setDisposable(JavaFxSubscriptions.unsubscribeInEventDispatchThread(() -> source.removeListener(listener)));
@@ -44,7 +42,7 @@ public final class ObservableSetSource {
 
     public static <T> Observable<T> fromObservableSetAdds(final ObservableSet<T> source) {
 
-        return Observable.create((ObservableOnSubscribe<T>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             SetChangeListener<T> listener = c -> {
                 if (c.wasAdded()) {
@@ -59,7 +57,7 @@ public final class ObservableSetSource {
 
     public static <T> Observable<T> fromObservableSetRemovals(final ObservableSet<T> source) {
 
-        return Observable.create((ObservableOnSubscribe<T>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             SetChangeListener<T> listener = c -> {
                 if (c.wasRemoved()) {
@@ -74,14 +72,14 @@ public final class ObservableSetSource {
 
     public static <T> Observable<SetChange<T>> fromObservableSetChanges(final ObservableSet<T> source) {
 
-        return Observable.create((ObservableOnSubscribe<SetChange<T>>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             SetChangeListener<T> listener = c -> {
                 if (c.wasRemoved()) {
-                    subscriber.onNext(new SetChange<T>(c.getElementRemoved(), Flag.REMOVED));
+                    subscriber.onNext(new SetChange<>(c.getElementRemoved(), Flag.REMOVED));
                 }
                 if (c.wasAdded()) {
-                    subscriber.onNext(new SetChange<T>(c.getElementAdded(), Flag.ADDED));
+                    subscriber.onNext(new SetChange<>(c.getElementAdded(), Flag.ADDED));
                 }
             };
             source.addListener(listener);

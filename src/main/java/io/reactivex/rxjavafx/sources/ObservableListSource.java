@@ -1,12 +1,12 @@
 /**
  * Copyright 2017 Netflix, Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ public final class ObservableListSource {
 
     public static <T> Observable<ObservableList<T>> fromObservableList(final ObservableList<T> source) {
 
-        Observable<ObservableList<T>> mutations = Observable.create((ObservableOnSubscribe<ObservableList<T>>) subscriber -> {
+        Observable<ObservableList<T>> mutations = Observable.create(subscriber -> {
             ListChangeListener<T> listener = c -> subscriber.onNext(source);
             source.addListener(listener);
             subscriber.setDisposable(JavaFxSubscriptions.unsubscribeInEventDispatchThread(() -> source.removeListener(listener)));
@@ -64,7 +64,7 @@ public final class ObservableListSource {
     }
     public static <T> Observable<T> fromObservableListRemovals(final ObservableList<T> source) {
 
-        return Observable.create((ObservableOnSubscribe<T>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             ListChangeListener<T> listener = c -> {
                 while (c.next()) {
@@ -81,7 +81,7 @@ public final class ObservableListSource {
     }
     public static <T> Observable<T> fromObservableListUpdates(final ObservableList<T> source) {
 
-        return Observable.create((ObservableOnSubscribe<T>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             ListChangeListener<T> listener = c -> {
                 while (c.next()) {
@@ -98,7 +98,7 @@ public final class ObservableListSource {
         });
     }
     public static <T> Observable<ListChange<T>> fromObservableListChanges(final ObservableList<T> source) {
-        return Observable.create((ObservableOnSubscribe<ListChange<T>>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             ListChangeListener<T> listener = c -> {
                 while (c.next()) {
@@ -123,7 +123,7 @@ public final class ObservableListSource {
 
     public static <T> Observable<ListChange<T>> fromObservableListDistinctChanges(final ObservableList<T> source) {
 
-        return Observable.create((ObservableOnSubscribe<ListChange<T>>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             final DupeCounter<T> dupeCounter = new DupeCounter<>();
             source.forEach(dupeCounter::add);
@@ -148,7 +148,7 @@ public final class ObservableListSource {
     }
     public static <T,R> Observable<ListChange<T>> fromObservableListDistinctChanges(final ObservableList<T> source, Function<T,R> mapper) {
 
-        return Observable.create((ObservableOnSubscribe<ListChange<T>>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             final DupeCounter<R> dupeCounter = new DupeCounter<>();
             source.stream().map(mapper).forEach(dupeCounter::add);
@@ -172,7 +172,7 @@ public final class ObservableListSource {
     }
     public static <T,R> Observable<ListChange<R>> fromObservableListDistinctMappings(final ObservableList<T> source, Function<T,R> mapper) {
 
-        return Observable.create((ObservableOnSubscribe<ListChange<R>>) subscriber -> {
+        return Observable.create(subscriber -> {
 
             final DupeCounter<R> dupeCounter = new DupeCounter<>();
             source.stream().map(mapper).forEach(dupeCounter::add);
@@ -203,7 +203,7 @@ public final class ObservableListSource {
 
         public int add(T value) {
             Integer prev = counts.get(value);
-            int newVal = 0;
+            int newVal;
             if (prev == null) {
                 newVal = 1;
                 counts.put(value, newVal);
